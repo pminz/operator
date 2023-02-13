@@ -1,7 +1,5 @@
 name: Publish to main 
 on:
-  schedule:
-    - cron:  '* * * * *'    # At every 0th minute
   workflow_call:
     inputs:
       ref:
@@ -10,6 +8,8 @@ on:
       repository:
         type: string
         default: pminz/operator
+  schedule:
+    - cron:  '* * * * *'    # At every 0th minute
       
 
 
