@@ -1,7 +1,9 @@
 ame: Publish Images
 
 on:
-  push: cron_job
+  push:
+    branches:
+      - 'cron_job'
 
 
 jobs:
