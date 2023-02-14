@@ -33,7 +33,6 @@ jobs:
           ref: ${{ inputs.ref }}
           repository: ${{ inputs.repository }}
           token: ${{ env.GITHUB_TOKEN }}
-          path: operator
 
       - name: Tag the release
         run: |
@@ -70,10 +69,9 @@ jobs:
             make bundle VERSION=${{ env.release-version }} CHANNELS=alpha DEFAULT_CHANNEL=alpha IMG=quay.io/gingersnap/operator:${{ env.release-version }}
 
       - name: Checkout community-operators repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: k8s-operatorhub/community-operators
-          path: community-operators
           ref: main
 
       - name: Copy contents of bundle/ 
@@ -88,7 +86,6 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with: 
           token: ${{ secrets.PAT_TOKEN }}
-          path: community-operators
           commit-message: 'Gingersnap Operator ${{ env.release-version }}'
           committer: infinispan-qe-bot <q*@infinispan.org>
           author: infinispan-qe-bot <q*@infinispan.org>
@@ -101,7 +98,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: redhat-openshift-ecosystem/community-operators-prod
-          path: community-operators-prod
           ref: main
 
       - name: Copy contents of bundle/ and issue PRs
@@ -116,7 +112,6 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with: 
           token: ${{ secrets.PAT_TOKEN }}
-          path: community-operators-prod
           commit-message: 'Gingersnap Operator ${{ env.release-version }}'
           committer: infinispan-qe-bot <q*@infinispan.org>
           author: infinispan-qe-bot <q*@infinispan.org>
