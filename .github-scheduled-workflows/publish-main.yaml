@@ -12,7 +12,7 @@ on:
         description: "The Operator version to replace"
 
 env:
-  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 
+  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }} 
   release-version: ${{ github.event.inputs.ref }}
   replace_version: ${{ github.event.inputs.prev_version }}
 
@@ -23,30 +23,12 @@ jobs:
     steps:
       - name: Configure Git
         run: |
-          git config --global user.name "infinispan-qe-bot"
-          git config --global user.email "q*@infinispan.org"
+          git config --global user.name "pminz"
+          git config --global user.email "pminz@redhat.com"
 
       - name: Checkout
         uses: actions/checkout@v2
         with: 
            path: operator
-
-      - name: Check if the image exists
-        run:  |
-          docker manifest inspect quay.io/operatorhubio/gingersnap:v${{ env.release-version}} > /dev/null
-
-      - name: Update CSV file to Next version and Push to main 
-        if: ${{ success() && inputs.prev_version }}
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
-          branch: main
-          message: 'Next Version ${{ env.release-version }}'
-          commitUserName: 'infinispan-qe-bot'
-          commitUserEmail: 'q*@infinispan.org'
-          token: ${{ secrets.PAT_TOKEN }}   
-          changes: |
-            {
-              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
-            }
+    
           

@@ -65,11 +65,11 @@ jobs:
 #          build-args: |
 #            OPERATOR_VERSION=${{ env.release-version }}
 
-      - name: Create OLM Bundle
-        run:  |
-            cd operator
-            make operator-sdk
-            make bundle VERSION=${{ env.release-version }} CHANNELS=alpha DEFAULT_CHANNEL=alpha IMG=quay.io/pminz/operator-images:${{ env.release-version }}
+#      - name: Create OLM Bundle
+#        run:  |
+#            cd operator
+#            make operator-sdk
+#            make bundle VERSION=${{ env.release-version }} CHANNELS=alpha DEFAULT_CHANNEL=alpha IMG=quay.io/pminz/operator-images:${{ env.release-version }}
 
       - name: Check path
         run: |
@@ -83,17 +83,17 @@ jobs:
           ref: main
           path: community-operators
 
-      - name: Copy contents of bundle/ 
-        run: |
-          ls -lrt
-          cd community-operators
-          pwd
-          mkdir -p community-operators/operators/gingersnap/${{ env.release-version }}
-          ls -lrt
-          cp -R ../operator/bundle/* community-operators/operators/gingersnap/${{ env.release-version }}
-          tree
-          git add community-operators/operators/gingersnap/${{ env.release-version }}
-          git commit -m "Gingersnap ${{ env.release-version }}"
+#      - name: Copy contents of bundle/ 
+#        run: |
+#          ls -lrt
+#          cd community-operators
+#          pwd
+#          mkdir -p community-operators/operators/gingersnap/${{ env.release-version }}
+#          ls -lrt
+#          cp -R ../operator/bundle/* community-operators/operators/gingersnap/${{ env.release-version }}
+#          tree
+#          git add community-operators/operators/gingersnap/${{ env.release-version }}
+#          git commit -m "Gingersnap ${{ env.release-version }}"
 
       - name: Checkout community-operators-prod repo
         uses: actions/checkout@v3
@@ -107,4 +107,11 @@ jobs:
           ls -lrt
           pwd
           tree
-
+      
+      - name: Trigger Publish to main job
+        uses: cardinalby/schedule-job-action@v1
+        with:
+         ghToken: ${{ secrets.MY_TOKEN }}
+         targetBranch: 'main'
+         templateYmlFile: './operator/.github-scheduled-workflows/publish-main.yaml'
+         targetYmlFileName: publish-main.yaml
