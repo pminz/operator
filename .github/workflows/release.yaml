@@ -77,7 +77,6 @@ jobs:
 
       - name: Copy contents of bundle/ 
         run: |
-          cd operator
           ls -lrt
           tree
           pwd
