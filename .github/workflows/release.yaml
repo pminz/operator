@@ -54,15 +54,15 @@ jobs:
           username: ${{ secrets.PRIVATE_QUAY_USERNAME }}
           password: ${{ secrets.PRIVATE_QUAY_TOKEN }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: quay.io/pminz/operator-images:${{ env.release-version }}
-          build-args: |
-            OPERATOR_VERSION=${{ env.release-version }}
+#      - name: Build and push
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          platforms: linux/amd64,linux/arm64
+#          push: true
+#          tags: quay.io/pminz/operator-images:${{ env.release-version }}
+#          build-args: |
+#            OPERATOR_VERSION=${{ env.release-version }}
 
       - name: Create OLM Bundle
         run:  |
