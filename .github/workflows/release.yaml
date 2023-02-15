@@ -33,11 +33,9 @@ jobs:
           ref: ${{ inputs.ref }}
           repository: ${{ inputs.repository }}
           token: ${{ env.GITHUB_TOKEN }}
-          path: operator
 
       - name: Tag the release
         run: |
-          cd operator
           ls -lrt
           pwd
           tree
@@ -46,12 +44,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: pminz/community-operators
-          path: community-operators
           ref: main
 
       - name: Copy contents of bundle/ 
         run: |
-          cd community-operators
           ls -lrt
           pwd
           tree
@@ -60,12 +56,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: pminz/community-operators-prod
-          path: community-operators-prod
           ref: main
 
       - name: Copy contents of bundle/ and issue PRs
         run: |
-          cd community-operators-prod
           ls -lrt
           pwd
           tree
