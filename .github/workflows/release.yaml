@@ -75,14 +75,12 @@ jobs:
           repository: pminz/community-operators
           ref: main
 
-      - name: check list of files
-        run: |
-             ls -lrt
-             tree
-             pwd
-
       - name: Copy contents of bundle/ 
         run: |
+          cd operator
+          ls -lrt
+          tree
+          pwd
           mkdir -p community-operators/operators/gingersnap/${{ env.release-version }}
           cp -R bundle/* community-operators/operators/gingersnap/${{ env.release-version }}
           git add community-operators/operators/gingersnap/${{ env.release-version }}
