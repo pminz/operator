@@ -45,7 +45,7 @@ jobs:
       - name: Checkout community-operators repo
         uses: actions/checkout@v2
         with:
-          repository: k8s-operatorhub/community-operators
+          repository: pminz/community-operators
           path: community-operators
           ref: main
 
@@ -59,7 +59,7 @@ jobs:
       - name: Checkout community-operators-prod repo
         uses: actions/checkout@v3
         with:
-          repository: redhat-openshift-ecosystem/community-operators-prod
+          repository: pminz/community-operators-prod
           path: community-operators-prod
           ref: main
 
