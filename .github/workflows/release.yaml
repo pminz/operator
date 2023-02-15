@@ -67,8 +67,14 @@ jobs:
 
       - name: Create OLM Bundle
         run:  |
+            cd operator
             make operator-sdk
             make bundle VERSION=${{ env.release-version }} CHANNELS=alpha DEFAULT_CHANNEL=alpha IMG=quay.io/pminz/operator-images:${{ env.release-version }}
+
+      - name: Check path
+        run: |
+             ls -lrt
+             pwd
 
       - name: Checkout community-operators repo
         uses: actions/checkout@v2
