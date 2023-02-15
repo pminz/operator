@@ -59,6 +59,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
+          push: true
           tags: pminz/operator-images:${{ env.release-version }}
           build-args: |
             OPERATOR_VERSION=${{ env.release-version }}
