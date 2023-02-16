@@ -36,12 +36,12 @@ jobs:
              ls -lrt
              pwd
              tree
-             
+
       - name: Update CSV file to Next version and Push to main
         if: success() 
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: config/manifests/bases/*-operator.clusterserviceversion.yaml
+          valueFile: ./operator/config/manifests/bases/*-operator.clusterserviceversion.yaml
           branch: main
           message: 'Next Version ${{ env.release-version }}'
           commitUserName: infinispan-qe-bot
