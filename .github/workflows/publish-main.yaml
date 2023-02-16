@@ -47,10 +47,6 @@ jobs:
           commitUserName: infinispan-qe-bot
           commitUserEmail: q*@infinispan.org
           token: '${{ secrets.PAT_TOKEN }}'
-          changes: |
-            {
-              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
-            }
     env:
       DELAYED_JOB_CHECKOUT_REF: 58ed60b8a831219a3b59e8010ec5a8e1c9ba1a4f
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
