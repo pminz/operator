@@ -12,7 +12,7 @@ on:
         description: "The Operator version to replace"
 
 env:
-  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 
+  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }} 
   release-version: ${{ github.event.inputs.ref }}
   replace_version: ${{ github.event.inputs.prev_version }}
 
@@ -23,8 +23,8 @@ jobs:
     steps:
       - name: Configure Git
         run: |
-          git config --global user.name "infinispan-qe-bot"
-          git config --global user.email "q*@infinispan.org"
+          git config --global user.name "pminz"
+          git config --global user.email "pminz@redhat.com"
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -42,11 +42,11 @@ jobs:
           valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
           branch: main
           message: 'Next Version ${{ env.release-version }}'
-          commitUserName: 'infinispan-qe-bot'
-          commitUserEmail: 'q*@infinispan.org'
-          token: ${{ secrets.PAT_TOKEN }}   
-          changes: |
-            {
-              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
-            }
+          commitUserName: 'pminz'
+          commitUserEmail: 'pminz@redhat.com'
+          token: ${{ secrets.MY_TOKEN }}   
+#          changes: |
+#            {
+#              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
+#            }
           
