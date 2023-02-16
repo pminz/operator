@@ -12,13 +12,13 @@ on:
       tag:
         type: string
         default: latest
-      prev_version:
+      old_version:
         type: string
       
 env:
   GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}   
   release-version: ${{ github.event.inputs.tag }}
-  replace_version: ${{ github.event.inputs.prev_version }}
+  replace_version: ${{ github.event.inputs.old }}
 
 jobs:
   release:
