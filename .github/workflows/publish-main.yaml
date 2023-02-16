@@ -1,27 +1,17 @@
-name: Publish to main
+name: Post Release - Update CSV
 'on':
   schedule:
-    - cron: '*/30 * * * *'
-  workflow_dispatch:
-    inputs:
-      ref:
-        description: The Operator branch/tag to checkout when creating the image.
-        required: true
-        default: release_operator_image
-      prev_version:
-        description: The Operator version to replace
+    - cron: '* * * * *'
 env:
-  GITHUB_TOKEN: '${{ secrets.PAT_TOKEN }}'
-  release-version: '${{ github.event.inputs.ref }}'
-  replace_version: '${{ github.event.inputs.prev_version }}'
+  GITHUB_TOKEN: '${{ secrets.MY_TOKEN }}'
 jobs:
   main:
     runs-on: ubuntu-latest
     steps:
       - name: Configure Git
         run: |
-          git config --global user.name "infinispan-qe-bot"
-          git config --global user.email "q*@infinispan.org"
+          git config --global user.name "pminz"
+          git config --global user.email "pminz@redaht.com"
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -37,15 +27,21 @@ jobs:
           valueFile: config/manifests/bases/*-operator.clusterserviceversion.yaml
           branch: main
           message: 'Next Version ${{ env.release-version }}'
-          commitUserName: infinispan-qe-bot
-          commitUserEmail: q*@infinispan.org
-          token: '${{ secrets.PAT_TOKEN }}'
+          commitUserName: pminz
+          commitUserEmail: pminz@redhat.com
+          token: '${{ secrets.MY_TOKEN }}'
           changes: |
             {
               "replaces": "gingersnap-operator.v${{ env.replace_version }}"
             }
+      - name: Remove scheduled job after 10 attempts
+        uses: cardinalby/unschedule-job-action@v1
+        if: github.run_number > 2
+        with:
+          ghToken: '${{ secrets.MY_TOKEN }}'
+          deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 58ed60b8a831219a3b59e8010ec5a8e1c9ba1a4f
+      DELAYED_JOB_CHECKOUT_REF: 2fcb56f469f58296d13ad9aad34718ca8a4bddf7
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
