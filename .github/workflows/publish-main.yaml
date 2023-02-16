@@ -20,8 +20,8 @@ jobs:
     steps:
       - name: Configure Git
         run: |
-          git config --global user.name "infinispan-qe-bot"
-          git config --global user.email "q*@infinispan.org"
+          git config --global user.name "pminz"
+          git config --global user.email "pminz@redhat.com"
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -31,7 +31,7 @@ jobs:
           docker manifest inspect quay.io/operatorhubio/gingersnap:v${{
           env.release-version}} > /dev/null
       - name: Update CSV file to Next version and Push to main
-        if: '${{ success() && inputs.prev_version }}'
+        if: success() 
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: config/manifests/bases/*-operator.clusterserviceversion.yaml
