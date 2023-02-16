@@ -30,11 +30,18 @@ jobs:
         run: >
           docker manifest inspect quay.io/operatorhubio/gingersnap:v${{
           env.release-version}} > /dev/null
+
+      - name: Debug
+        run: |
+             ls -lrt
+             pwd
+             tree
+             
       - name: Update CSV file to Next version and Push to main
         if: success() 
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: ./operator/config/manifests/bases/*-operator.clusterserviceversion.yaml
+          valueFile: config/manifests/bases/*-operator.clusterserviceversion.yaml
           branch: main
           message: 'Next Version ${{ env.release-version }}'
           commitUserName: infinispan-qe-bot
