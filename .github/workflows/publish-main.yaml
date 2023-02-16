@@ -4,6 +4,8 @@ name: Post Release - Update CSV
     - cron: '* * * * *'
 env:
   GITHUB_TOKEN: '${{ secrets.MY_TOKEN }}'
+  release-version: '${{ github.event.inputs.tag }}'
+  replace_version: '${{ github.event.inputs.prev_version }}'
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -41,7 +43,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 9016f57716aabe87cf8141d6b28a04daa8f1f5f7
+      DELAYED_JOB_CHECKOUT_REF: 9fa2f12acda7d7827e6ae80cc0d68398cf89ece2
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
