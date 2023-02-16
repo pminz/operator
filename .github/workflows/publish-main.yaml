@@ -3,10 +3,7 @@ name: Post Release - Update CSV
   schedule:
     - cron: '* * * * *'
 env:
-  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}   
-  release-version: ${{ github.event.inputs.tag }}
-  replace_version: ${{ github.event.inputs.prev_version }}
-  
+  GITHUB_TOKEN: '${{ secrets.MY_TOKEN }}'
 jobs:
   main:
     runs-on: ubuntu-latest
