@@ -4,7 +4,9 @@ on:
     - cron: '* * * * *'    # At every  minute
     
 env:
-  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }} 
+  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}   
+  release-version: ${{ github.event.inputs.tag }}
+  replace_version: ${{ github.event.inputs.prev_version }}
 
 jobs:
   main:
