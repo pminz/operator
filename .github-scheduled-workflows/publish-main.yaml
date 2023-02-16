@@ -36,7 +36,7 @@ jobs:
           docker manifest inspect quay.io/operatorhubio/gingersnap:v${{ env.release-version}} > /dev/null
 
       - name: Update CSV file to Next version and Push to main 
-        if: ${{ success() && inputs.prev_version }}
+        if: ${{ success()
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
@@ -45,8 +45,8 @@ jobs:
           commitUserName: 'pminz'
           commitUserEmail: 'pminz@redhat.com'
           token: ${{ secrets.MY_TOKEN }}   
-#          changes: |
-#            {
-#              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
-#            }
+          changes: |
+            {
+              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
+            }
           
