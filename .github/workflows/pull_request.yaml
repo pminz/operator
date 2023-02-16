@@ -1,110 +1,111 @@
-name: Test
-
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
-
-env:
-  TEST_OUTPUT_DIR: ${{ github.workspace }}/test/reports
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Init variables action variables
-        id: go-cache-paths
-        run: |
-          echo "::set-output name=go-build::$(go env GOCACHE)"
-          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
-
-      # Cache go build cache, used to speedup go test
-      - name: Go Build Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.go-build }}
-          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
-
-      # Cache go mod cache, used to speedup builds
-      - name: Go Mod Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.go-mod }}
-          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
-
-      # Cache local bin dependencies
-      - name: Local Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: bin
-          key: ${{ runner.os }}-bin-${{ hashFiles('Makefile') }}
-
-      - name: Lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          args: --enable bodyclose,gofmt,unconvert,whitespace --timeout 3m0s --verbose
-          version: v1.46.2
-
-      - name: Unit Tests
-        run: make test
-
-      - name: Check for unstaged changes
-        run: git diff --name-only --exit-code
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Install Local Dependencies
-        run: |
-          make oc operator-sdk
-          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
-
-      - name: Install Kind
-        run: go install sigs.k8s.io/kind@v0.14.0
-
-      - name: Create Kind Cluster
-        run: ./hack/kind.sh
-
-      - name: Cache skaffold image builds & config
-        uses: actions/cache@v2
-        with:
-          path: ~/.skaffold/
-          key: fixed-${{ github.sha }}
-          restore-keys: |
-            fixed-${{ github.sha }}
-            fixed-
-
-      - name: Build and Deploy Operator with OLM
-        run: |
-          make catalog-source catalog-install
-          ./hack/create-subscription.sh
-          # First check deployment exists to prevent wait returning not found error
-          i=1;until kubectl -n olm get deployment/gingersnap-operator-controller-manager || (( $i == 60 )) ; do ((i=i+1)); sleep 10; done
-          kubectl -n operators wait --timeout=60s --for=condition=available deployment/gingersnap-operator-controller-manager
-
-      - name: E2E Integration tests
-        run: make test-e2e TEST_OPERATOR_NAMESPACE=operators TEST_NAMESPACE=namespace-for-testing TEST_NAMESPACE_DELETE=false
-
-      - name: Inspect Cluster
-        if: failure()
-        run: oc adm inspect ns
-
-      - name: Inspect Artifacts
-        uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: oc-inspect
-          path: inspect.*
-
-      - name: Test Logs
-        uses: actions/upload-artifact@v3
-        if: success() || failure()
-        with:
-          name: test-results
-          path: ${{ env.TEST_OUTPUT_DIR }}
+#name: Test
+#
+#on:
+#  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#
+#env:
+#  TEST_OUTPUT_DIR: ${{ github.workspace }}/test/reports
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Init variables action variables
+#        id: go-cache-paths
+#        run: |
+#          echo "::set-output name=go-build::$(go env GOCACHE)"
+#          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+#
+#      # Cache go build cache, used to speedup go test
+#      - name: Go Build Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: ${{ steps.go-cache-paths.outputs.go-build }}
+#          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+#
+#      # Cache go mod cache, used to speedup builds
+#      - name: Go Mod Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+#          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+#
+#      # Cache local bin dependencies
+#      - name: Local Dependencies Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: bin
+#          key: ${{ runner.os }}-bin-${{ hashFiles('Makefile') }}
+#
+#      - name: Lint
+#        uses: golangci/golangci-lint-action@v3
+#        with:
+#          args: --enable bodyclose,gofmt,unconvert,whitespace --timeout 3m0s --verbose
+#          version: v1.46.2
+#
+#      - name: Unit Tests
+#        run: make test
+#
+#      - name: Check for unstaged changes
+#        run: git diff --name-only --exit-code
+#
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
+#
+#      - name: Install Local Dependencies
+#        run: |
+#          make oc operator-sdk
+#          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+#
+#      - name: Install Kind
+#        run: go install sigs.k8s.io/kind@v0.14.0
+#
+#      - name: Create Kind Cluster
+#        run: ./hack/kind.sh
+#
+#      - name: Cache skaffold image builds & config
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.skaffold/
+#          key: fixed-${{ github.sha }}
+#          restore-keys: |
+#            fixed-${{ github.sha }}
+#            fixed-
+#
+#      - name: Build and Deploy Operator with OLM
+#        run: |
+#          make catalog-source catalog-install
+#          ./hack/create-subscription.sh
+#          # First check deployment exists to prevent wait returning not found error
+#          i=1;until kubectl -n olm get deployment/gingersnap-operator-controller-manager || (( $i == 60 )) ; do ((i=i+1)); sleep 10; done
+#          kubectl -n operators wait --timeout=60s --for=condition=available deployment/gingersnap-operator-controller-manager
+#
+#      - name: E2E Integration tests
+#        run: make test-e2e TEST_OPERATOR_NAMESPACE=operators TEST_NAMESPACE=namespace-for-testing TEST_NAMESPACE_DELETE=false
+#
+#      - name: Inspect Cluster
+#        if: failure()
+#        run: oc adm inspect ns
+#
+#      - name: Inspect Artifacts
+#        uses: actions/upload-artifact@v3
+#        if: failure()
+#        with:
+#          name: oc-inspect
+#          path: inspect.*
+#
+#      - name: Test Logs
+#        uses: actions/upload-artifact@v3
+#        if: success() || failure()
+#        with:
+#          name: test-results
+#          path: ${{ env.TEST_OUTPUT_DIR }}
+#

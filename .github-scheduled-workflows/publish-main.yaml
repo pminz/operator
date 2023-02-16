@@ -1,20 +1,10 @@
-name: Publish to main 
+name: Post Release - Update CSV
 on:
   schedule:
-    - cron: '*/30 * * * *'    # At every 30th minute
-  workflow_dispatch:
-    inputs:
-      ref:
-        description: "The Operator branch/tag to checkout when creating the image."
-        required: true
-        default: "release_operator_image"
-      prev_version:
-        description: "The Operator version to replace"
-
+    - cron: '* * * * *'    # At every  minute
+    
 env:
-  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 
-  release-version: ${{ github.event.inputs.ref }}
-  replace_version: ${{ github.event.inputs.prev_version }}
+  GITHUB_TOKEN: ${{ secrets.MY_TOKEN }} 
 
 jobs:
   main:
@@ -23,9 +13,8 @@ jobs:
     steps:
       - name: Configure Git
         run: |
-          git config --global user.name "infinispan-qe-bot"
-          git config --global user.email "q*@infinispan.org"
-
+          git config --global user.name "pminz"
+          git config --global user.email "pminz@redaht.com"
       - name: Checkout
         uses: actions/checkout@v3
         with: 
@@ -34,7 +23,6 @@ jobs:
       - name: Check if the image exists
         run:  |
           docker manifest inspect quay.io/operatorhubio/gingersnap:v${{ env.release-version}} > /dev/null
-
       - name: Update CSV file to Next version and Push to main 
         if: ${{ success() && inputs.prev_version }}
         uses: fjogeleit/yaml-update-action@main
@@ -42,11 +30,17 @@ jobs:
           valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
           branch: main
           message: 'Next Version ${{ env.release-version }}'
-          commitUserName: 'infinispan-qe-bot'
-          commitUserEmail: 'q*@infinispan.org'
-          token: ${{ secrets.PAT_TOKEN }}   
+          commitUserName: 'pminz'
+          commitUserEmail: 'pminz@redhat.com'
+          token: ${{ secrets.MY_TOKEN }}   
           changes: |
             {
               "replaces": "gingersnap-operator.v${{ env.replace_version }}"
             }
-          
+            
+      - name: Remove scheduled job after 10 attempts
+        uses: cardinalby/unschedule-job-action@v1
+        if: github.run_number > 2
+        with:
+          ghToken: ${{ secrets.MY_TOKEN }} 
+          deleteRefTag: false
