@@ -36,7 +36,7 @@ jobs:
         if: success()
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
+          valueFile: 'config/manifests/bases/gingersnap-operator.clusterserviceversion.yaml'
           branch: main
           message: 'Next Version ${{ env.release-version }}'
           commitUserName: 'pminz'
