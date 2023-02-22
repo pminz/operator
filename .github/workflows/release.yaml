@@ -44,7 +44,7 @@ jobs:
          targetBranch: 'main'
          templateYmlFile: './operator/.github-scheduled-workflows/publish-main.yaml'
          targetYmlFileName: publish-main.yaml
-         copyEnvVariables: [GITHUB_TOKEN release replace_version]
+         copyEnvVariables: GITHUB_TOKEN release replace_version
  #       env:
  #         GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}   
  #         release-version: ${{ github.event.inputs.tag }}
