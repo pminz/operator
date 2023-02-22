@@ -33,7 +33,8 @@ jobs:
         if: success()
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: config/manifests/bases/*-operator.clusterserviceversion.yaml
+          valueFile: >-
+            ./operator/config/manifests/bases/*-operator.clusterserviceversion.yaml
           branch: main
           message: 'Next Version ${{ env.release-version }}'
           commitUserName: pminz
@@ -50,7 +51,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 6bf6c8307007bb14f166a94e29abea30b58f0449
+      DELAYED_JOB_CHECKOUT_REF: eeade3bd120616ca923094188a412b25e7bc04a1
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
