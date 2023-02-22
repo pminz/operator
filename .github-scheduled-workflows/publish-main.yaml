@@ -29,7 +29,7 @@ jobs:
 
           
       - name: Update CSV file to Next version and Push to main 
-        if: ${{ success() && inputs.prev_version }}
+        if: success()
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
