@@ -34,7 +34,7 @@ jobs:
           token: '${{ secrets.MY_TOKEN }}'
           changes: |
             {
-              "replaces": "gingersnap.v${{ env.replace_version }}"
+              "spec.replaces": "gingersnap.v${{ env.replace_version }}"
             }
       - name: Remove scheduled job after 10 attempts
         uses: cardinalby/unschedule-job-action@v1
@@ -43,7 +43,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 75f5e190a99459a25609327659f0fe1426b5fc0c
+      DELAYED_JOB_CHECKOUT_REF: 7d3c6fb90c3ab09d97856083b7ab15f2aafa45b9
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
