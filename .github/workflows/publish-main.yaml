@@ -20,13 +20,6 @@ jobs:
         run: >
           docker manifest inspect quay.io/pminz/operator-images:${{
           env.release-version}} > /dev/null
-      - name: Debug
-        run: |
-          pwd
-          ls -lrt
-          cd operator
-          pwd
-          ls -lrt
       - name: Update CSV file to Next version and Push to main
         if: success()
         uses: fjogeleit/yaml-update-action@main
@@ -49,7 +42,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 5542dca13c8c6a48e71702ec9adbf38cdc003813
+      DELAYED_JOB_CHECKOUT_REF: e8effee995d5cc2087d92b932edde7e1d25e0b0f
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
