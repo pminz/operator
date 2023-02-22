@@ -1,7 +1,7 @@
 name: Post Release - Update CSV
 on:
   schedule:
-    - cron: '/5 * * * *'    # At every  minute
+    - cron: '* * * * *'    # At every  minute
     
 env:
   GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}   
