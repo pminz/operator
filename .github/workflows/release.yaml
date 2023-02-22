@@ -31,7 +31,7 @@ jobs:
           git config --global user.email "pminz@redhat.com"
         
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           ref: ${{ inputs.ref }}
           repository: ${{ inputs.repository }}
