@@ -1,0 +1,40 @@
+name: Post Release - Update CSV
+'on':
+  schedule:
+    - cron: '* * * * *'
+env:
+  GITHUB_TOKEN: '${{ secrets.MY_TOKEN }}'
+  release-version: '${{ github.event.inputs.tag }}'
+  replace_version: '${{ github.event.inputs.old_version }}'
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Git
+        run: |
+          git config --global user.name "pminz"
+          git config --global user.email "pminz@redhat.com"
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: operator
+      - name: Check if the image exists
+        run: >
+          docker manifest inspect quay.io/operatorhubio/gingersnap:v${{
+          env.release-version}} > /dev/null
+      - name: Test
+        run: |
+          echo "Testing"
+      - name: Remove scheduled job after 10 attempts
+        uses: cardinalby/unschedule-job-action@v1
+        if: github.run_number > 2
+        with:
+          ghToken: '${{ secrets.MY_TOKEN }}'
+          deleteRefTag: false
+    env:
+      DELAYED_JOB_CHECKOUT_REF: 08c410df03d2adb778283b11315739c20ff99d6d
+      DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
+      DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
+      DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
+      release-version: 0.0.1
+      replace_version: ''
