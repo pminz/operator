@@ -24,7 +24,8 @@ jobs:
           env.release-version}} > /dev/null
       - name: Test
         run: |
-          echo "Testing"
+          echo "Testing unschedule-job-action@v1"
+          
       - name: Remove scheduled job after 10 attempts
         uses: cardinalby/unschedule-job-action@v1
         if: github.run_number > 2
