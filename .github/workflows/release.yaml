@@ -38,6 +38,12 @@ jobs:
           token: ${{ env.GITHUB_TOKEN }}
           path: operator
 
+      - name: Tag the release
+        run: |
+          cd operator
+          git tag -a v${{ env.release-version}} -m "Release Operator:: ${{ env.release-version}}"
+          git push origin --tags
+
       - name: Trigger Post Release Job
         uses: cardinalby/schedule-job-action@v1
         with:
@@ -46,7 +52,3 @@ jobs:
          templateYmlFile: './operator/.github-scheduled-workflows/publish-main.yaml'
          targetYmlFileName: publish-main.yaml
          copyEnvVariables:  release-version replace_version
- #       env:
- #         GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}   
- #         release-version: ${{ github.event.inputs.tag }}
- #         replace_version: ${{ github.event.inputs.old_version }}
