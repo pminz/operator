@@ -40,7 +40,7 @@ jobs:
           token: ${{ secrets.MY_TOKEN }}   
           changes: |
             {
-              "replaces": "gingersnap.v${{ env.replace_version }}"
+              "spec.replaces": "gingersnap.v${{ env.replace_version }}"
             }
             
       - name: Remove scheduled job after 10 attempts
