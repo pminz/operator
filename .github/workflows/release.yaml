@@ -31,7 +31,7 @@ jobs:
           git config --global user.email "pminz@redhat.com"
         
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
           repository: ${{ inputs.repository }}
@@ -45,7 +45,7 @@ jobs:
          targetBranch: 'main'
          templateYmlFile: './operator/.github-scheduled-workflows/publish-main.yaml'
          targetYmlFileName: publish-main.yaml
-         copyEnvVariables: GITHUB_TOKEN release-version replace_version
+         copyEnvVariables:  release-version replace_version
  #       env:
  #         GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}   
  #         release-version: ${{ github.event.inputs.tag }}
