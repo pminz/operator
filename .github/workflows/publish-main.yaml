@@ -20,7 +20,7 @@ jobs:
           path: operator
       - name: Check if the image exists
         run: >
-          docker manifest inspect quay.io/pminz/operator-images:v${{
+          docker manifest inspect quay.io/pminz/operator-images:${{
           env.release-version}} > /dev/null
       - name: Update CSV file to Next version and Push to main
         if: '${{ success() && inputs.prev_version }}'
@@ -43,7 +43,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 9e73a666db81419665e9bf2eaa9a1ad1d76de9d5
+      DELAYED_JOB_CHECKOUT_REF: 57eb39053e09a18b959084d3356e1b2117763865
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
