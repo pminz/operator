@@ -24,16 +24,7 @@ jobs:
       - name: Check if the image exists
         run:  |
           docker manifest inspect quay.io/pminz/operator-images:${{ env.release-version}} > /dev/null
-
-      - name: Debug
-        run: |
-            pwd
-            ls -lrt
-            cd operator
-            pwd
-            ls -lrt
-
-          
+         
       - name: Update CSV file to Next version and Push to main 
         if: success()
         uses: fjogeleit/yaml-update-action@main
