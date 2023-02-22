@@ -17,6 +17,7 @@ jobs:
         run: |
           git config --global user.name "pminz"
           git config --global user.email "pminz@redaht.com"
+
       - name: Checkout
         uses: actions/checkout@v3
         with: 
@@ -25,21 +26,25 @@ jobs:
       - name: Check if the image exists
         run:  |
           docker manifest inspect quay.io/operatorhubio/gingersnap:v${{ env.release-version}} > /dev/null
+
+      - name: Test
+        run: |
+           echo "Testing"
           
-      - name: Update CSV file to Next version and Push to main 
-        if: ${{ success() && inputs.prev_version }}
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
-          branch: main
-          message: 'Next Version ${{ env.release-version }}'
-          commitUserName: 'pminz'
-          commitUserEmail: 'pminz@redhat.com'
-          token: ${{ secrets.MY_TOKEN }}   
-          changes: |
-            {
-              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
-            }
+#      - name: Update CSV file to Next version and Push to main 
+#        if: ${{ success() && inputs.prev_version }}
+#        uses: fjogeleit/yaml-update-action@main
+#        with:
+#          valueFile: 'config/manifests/bases/*-operator.clusterserviceversion.yaml'
+#          branch: main
+#          message: 'Next Version ${{ env.release-version }}'
+#          commitUserName: 'pminz'
+#          commitUserEmail: 'pminz@redhat.com'
+#          token: ${{ secrets.MY_TOKEN }}   
+#          changes: |
+#            {
+#              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
+#            }
             
       - name: Remove scheduled job after 10 attempts
         uses: cardinalby/unschedule-job-action@v1
