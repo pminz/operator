@@ -10,11 +10,11 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - name: Remove scheduled job after 1 attempts
+      - name: Remove scheduled job after 2 attempts
         uses: cardinalby/unschedule-job-action@v1
         if: github.run_number > 2
         with:
-          ghToken: '${{ secrets.PAT_TOKEN }}'
+          ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
       - name: Configure Git
         run: |
@@ -46,7 +46,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: aa5a187f30e8f5e912a195e8bc7ac025e49d13b0
+      DELAYED_JOB_CHECKOUT_REF: 0108b10c5ea0d4fac24ea2ce2b765d80368bea97
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
