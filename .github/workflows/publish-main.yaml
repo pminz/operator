@@ -43,9 +43,9 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 8c8858e5cfc59b887c2de8da5821cc9916c3aa85
+      DELAYED_JOB_CHECKOUT_REF: 284a8b7a52146704a436d40f31efbfde5eda69d6
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
-      GITHUB_TOKEN: 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
+      release-version: 0.0.1
       replace_version: ''
