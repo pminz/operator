@@ -22,20 +22,9 @@ jobs:
         run: >
           docker manifest inspect quay.io/operatorhubio/gingersnap:v${{
           env.release-version}} > /dev/null
-      - name: Update CSV file to Next version and Push to main
-        if: '${{ success() && inputs.prev_version }}'
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          valueFile: config/manifests/bases/*-operator.clusterserviceversion.yaml
-          branch: main
-          message: 'Next Version ${{ env.release-version }}'
-          commitUserName: pminz
-          commitUserEmail: pminz@redhat.com
-          token: '${{ secrets.MY_TOKEN }}'
-          changes: |
-            {
-              "replaces": "gingersnap-operator.v${{ env.replace_version }}"
-            }
+      - name: Test
+        run: |
+          echo "Testing"
       - name: Remove scheduled job after 10 attempts
         uses: cardinalby/unschedule-job-action@v1
         if: github.run_number > 2
@@ -43,7 +32,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: 30da32e519d01382a3dc46aef2d7f5a55074c704
+      DELAYED_JOB_CHECKOUT_REF: 1a098e77efcf7683c6c7f857080e012c5cb49dc6
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
