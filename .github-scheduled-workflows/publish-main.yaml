@@ -20,8 +20,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-        with: 
-           path: operator
 
       - name: Check if the image exists
         run:  |
@@ -40,7 +38,7 @@ jobs:
         if: success()
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: './operator/config/manifests/bases/*-operator.clusterserviceversion.yaml'
+          valueFile: 'config/manifests/bases/gingersnap-operator.clusterserviceversion.yaml'
           branch: main
           message: 'Next Version ${{ env.release-version }}'
           commitUserName: 'pminz'
