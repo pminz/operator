@@ -5,7 +5,7 @@ metadata:
     alm-examples: '[]'
     capabilities: Basic Install
     categories: Database
-    certified: "false"
+    certified: 'false'
     containerImage: <IMAGE>
     repository: https://github.com/gingersnap-project/operator
   name: gingersnap.v0.0.0
@@ -14,48 +14,48 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: Cache is the Schema for the caches API
-      displayName: Cache
-      kind: Cache
-      name: caches.gingersnap-project.io
-      version: v1alpha1
-    - description: EagerCacheRule is the Schema for the eagercacherules API
-      displayName: Eager Cache Rule
-      kind: EagerCacheRule
-      name: eagercacherules.gingersnap-project.io
-      version: v1alpha1
-    - description: LazyCacheRule is the Schema for the lazycacherules API
-      displayName: Lazy Cache Rule
-      kind: LazyCacheRule
-      name: lazycacherules.gingersnap-project.io
-      version: v1alpha1
+      - description: Cache is the Schema for the caches API
+        displayName: Cache
+        kind: Cache
+        name: caches.gingersnap-project.io
+        version: v1alpha1
+      - description: EagerCacheRule is the Schema for the eagercacherules API
+        displayName: Eager Cache Rule
+        kind: EagerCacheRule
+        name: eagercacherules.gingersnap-project.io
+        version: v1alpha1
+      - description: LazyCacheRule is the Schema for the lazycacherules API
+        displayName: Lazy Cache Rule
+        kind: LazyCacheRule
+        name: lazycacherules.gingersnap-project.io
+        version: v1alpha1
   description: Memory Service
   displayName: gingersnap Operator
   install:
     spec:
       deployments: null
-    strategy: ""
+    strategy: ''
   installModes:
-  - supported: false
-    type: OwnNamespace
-  - supported: false
-    type: SingleNamespace
-  - supported: false
-    type: MultiNamespace
-  - supported: true
-    type: AllNamespaces
+    - supported: false
+      type: OwnNamespace
+    - supported: false
+      type: SingleNamespace
+    - supported: false
+      type: MultiNamespace
+    - supported: true
+      type: AllNamespaces
   keywords:
-  - cache
-  - caching
+    - cache
+    - caching
   links:
-  - name: Gingersnap Operator
-    url: https://gingersnap-project.io
+    - name: Gingersnap Operator
+      url: https://gingersnap-project.io
   maintainers:
-  - email: infinispan-dev@lists.jboss.org
-    name: Infinispan Community
+    - email: infinispan-dev@lists.jboss.org
+      name: Infinispan Community
   maturity: alpha
   minKubeVersion: 1.23.5
   provider:
     name: Gingersnap
-  replaces: gingersnap.v0.0.0
+  replaces: gingersnap.v0.0.1
   version: 0.0.0
