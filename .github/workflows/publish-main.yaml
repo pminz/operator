@@ -16,8 +16,6 @@ jobs:
           git config --global user.email "pminz@redhat.com"
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          path: operator
       - name: Check if the image exists
         run: >
           docker manifest inspect quay.io/pminz/operator-images:${{
@@ -34,7 +32,7 @@ jobs:
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: >-
-            ./operator/config/manifests/bases/*-operator.clusterserviceversion.yaml
+            config/manifests/bases/gingersnap-operator.clusterserviceversion.yaml
           branch: main
           message: 'Next Version ${{ env.release-version }}'
           commitUserName: pminz
@@ -51,7 +49,7 @@ jobs:
           ghToken: '${{ secrets.MY_TOKEN }}'
           deleteRefTag: false
     env:
-      DELAYED_JOB_CHECKOUT_REF: eeade3bd120616ca923094188a412b25e7bc04a1
+      DELAYED_JOB_CHECKOUT_REF: 5542dca13c8c6a48e71702ec9adbf38cdc003813
       DELAYED_JOB_CHECKOUT_REF_IS_TAG: 'false'
       DELAYED_JOB_WORKFLOW_FILE_PATH: .github/workflows/publish-main.yaml
       DELAYED_JOB_WORKFLOW_UNSCHEDULE_TARGET_BRANCH: main
