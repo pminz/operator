@@ -44,6 +44,10 @@ jobs:
           git tag -a v${{ env.release-version}} -m "Release Operator:: ${{ env.release-version}}"
           git push origin --tags
 
+      - name: Debug
+        run: |
+            echo "testing" 
+
       - name: Trigger Post Release Job
         uses: cardinalby/schedule-job-action@v1
         with:
